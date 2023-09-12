@@ -3,8 +3,10 @@
 
 <head>
   <title>Salary Calculator</title>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    
     body {
       background-color: #4f008c;
       color: white;
@@ -12,7 +14,25 @@
       margin: 0;
       padding: 20px;
     }
-
+    .navbar {
+        overflow: hidden;
+        background-color: #333;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .navbar a {
+        float: left;
+        display: block;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+    .navbar a:hover {
+        background-color: #ddd;
+        color: black;
+    }
     h1 {
       text-align: center;
     }
@@ -126,7 +146,10 @@
 </head>
 
 <body>
-
+  <div class="navbar">
+    <a href="./loan.html">loan</a>
+    <a href="./salarycalc.html">salarycalc</a>
+</div>
   <h1>Salary Calculator</h1>
 
 
