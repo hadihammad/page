@@ -1,131 +1,16 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Home Loan Calculator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f2f2f2;
-    }
-    h2 {
-      color: #4a90e2;
-    }
-    label {
-      font-weight: bold;
-    }
-    table, th, td {
-      border: 1px solid black;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 5px;
-      text-align: center;
-    }
-    #paymentTable {
-      width: 100%;
-      margin-top: 20px;
-    }
-    button {
-      background-color: #4a90e2;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-  <h2>Home Loan Calculator</h2>
-  <label for="amount">Loan Amount:</label>
-  <input type="text" id="amount" placeholder="Enter loan amount" oninput="formatInput('amount')" /><br/><br/>
-  <label for="rate">Interest Rate (%):</label>
-  <input type="text" id="rate" placeholder="Enter interest rate" oninput="formatInput('rate')" /><br/><br/>
-  <label for="years">Loan Term (Years):</label>
-  <input type="text" id="years" placeholder="Enter loan term in years" oninput="formatInput('years')" /><br/><br/>
-  <button onclick="calculate()">Calculate</button>
-  <h3>Loan Details:</h3>
-  <p id="output"></p>
-  <h3>Payment Schedule:</h3>
-  <table id="paymentTable">
-    <thead>
-      <tr>
-        <th>Month</th>
-        <th>Principal Payment (SAR)</th>
-        <th>Interest Payment (SAR)</th>
-        <th>Total Payment (SAR)</th>
-        <th>Remaining Balance (SAR)</th>
-      </tr>
-    </thead>
-    <tbody id="paymentBody"></tbody>
-    <tfoot id="paymentFooter"></tfoot>
-  </table>
-  <script>
-    function formatNumber(n) {
-      return n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    }
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Business website</title>
+  </head>
+  <body>
+    <nav>
+      <a href="./loan.html">loan</a>
+      <a href="./salarycalc.html">salarycalc</a>
 
-    function formatInput(id) {
-      var input = document.getElementById(id);
-      var value = input.value.replace(/,/g, '');
-      input.value = parseFloat(value).toLocaleString('en-US');
-    }
-	
-	
-	
-	function calculate() {
-    var loanAmount = parseFloat(document.getElementById("amount").value.replace(/,/g, ''));
-    var interestRate = parseFloat(document.getElementById("rate").value.replace(/,/g, '')) / 100;
-    var loanTerm = parseFloat(document.getElementById("years").value.replace(/,/g, ''));
-
-    var fees = Math.min(loanAmount * 0.01, 5000);
-    var vat = fees * 0.05;
-    var totalFees = fees + vat;
-
-    var totalInterest = loanAmount * interestRate * loanTerm;
-    var totalRepayment = loanAmount + totalInterest;
-    
-    var monthlyPayment = totalRepayment / (loanTerm * 12);
-    var remainingInterest = totalInterest;
-
-    var tableBody = document.getElementById("paymentBody");
-    tableBody.innerHTML = "";
-    var remainingBalance = totalRepayment;
-
-    for (var i = 1; i <= loanTerm * 12; i++) {
-        var interestPaymentForThisMonth = Math.min(remainingInterest, remainingBalance * (interestRate / 12));
-        var principalPaymentForThisMonth = monthlyPayment - interestPaymentForThisMonth;
-
-        if (remainingInterest <= 0) {
-            principalPaymentForThisMonth = monthlyPayment;
-            interestPaymentForThisMonth = 0;
-        }
-
-        remainingInterest -= interestPaymentForThisMonth;
-        remainingBalance -= monthlyPayment;
-
-        var row = "<tr><td>" + i + "</td><td>SAR " + formatNumber(principalPaymentForThisMonth) + "</td><td>SAR " + formatNumber(interestPaymentForThisMonth) + "</td><td>SAR " + formatNumber(monthlyPayment) + "</td><td>SAR " + formatNumber(remainingBalance) + "</td></tr>";
-        tableBody.innerHTML += row;
-    }
-
-    document.getElementById("output").innerHTML = "Original Loan Amount: SAR " + formatNumber(loanAmount) + 
-    "<br>Interest Rate: " + (interestRate * 100).toFixed(2) + "%" + 
-    "<br>Monthly Payment: SAR " + formatNumber(monthlyPayment) + 
-    "<br>Fees: SAR " + formatNumber(fees) + 
-    "<br>VAT: SAR " + formatNumber(vat) + 
-    "<br>Total Fees: SAR " + formatNumber(totalFees) +
-    "<br>Total Principal Payment: SAR " + formatNumber(loanAmount) +
-    "<br>Total Interest Payment: SAR " + formatNumber(totalInterest) +
-    "<br>Total Payments (Principal + Interest): SAR " + formatNumber(totalRepayment);
-}
-
-
-
-
-
-
-
-  </script>
-</body>
+    </nav>
+  </body>
 </html>

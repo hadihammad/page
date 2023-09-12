@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Salary Calculator</title>
+
+  <style>
+    body {
+      background-color: #4f008c;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-group input[type="number"],
+    .form-group select {
+      width: 100%;
+      max-width: 200px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .form-group .checkbox-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .form-group .checkbox-group label {
+      margin-right: 10px;
+    }
+
+    .button-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .button-container button {
+      background-color: #8f00ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .button-container button:hover {
+      background-color: #6a00b8;
+    }
+
+    .results-container {
+      margin-top: 40px;
+    }
+
+    .results-container h2 {
+      margin-top: 0;
+    }
+
+    .results-container p {
+      margin-bottom: 10px;
+    }
+
+    /* Media Queries */
+    @media (min-width: 600px) {
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .form-group input[type="number"],
+      .form-group select {
+        max-width: 100%;
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .results-container {
+        margin-top: 20px;
+      }
+
+      .form-group.input-text {
+        margin-bottom: 20px;
+      }
+
+      .form-group.input-text label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .form-group.input-text input[type="text"] {
+        width: 100%;
+        max-width: 300px;
+        /* You can adjust this value as needed */
+        padding: 10px;
+        font-size: 16px;
+      }
+  </style>
+  <!-- Assuming the file is in a "js" folder within your project -->
+  <script src="js/xlsx.full.min.js"></script>
+
+
+</head>
+
+<body>
+
+  <h1>Salary Calculator</h1>
+
+
+
+  <div class="form-container">
+
+
+    <div class="form-group input-text">
+      <label for="currentAnnualIncome">Current Annual Income:</label>
+      <input type="number" id="currentAnnualIncome" name="currentAnnualIncome" maxlength="10">
+    </div>
+
+    <div class="form-group input-text">
+      <label for="offerCompanyName">Offer - Company Name:</label>
+      <input type="text" id="offerCompanyName" name="offerCompanyName" maxlength="50">
+    </div>
+
+    <div class="form-group">
+      <label for="basic">Enter Basic Salary:</label>
+      <input type="number" id="basic" name="basic" maxlength="10">
+    </div>
+
+    <div class="form-group">
+      <label for="specialAllowance">Enter Special Allowance (optional):</label>
+      <input type="number" id="specialAllowance" name="specialAllowance" value="0" maxlength="10">
+    </div>
+
+    <div class="form-group">
+      <label for="deduction">Enter Deduction (optional):</label>
+      <input type="number" id="deduction" name="deduction" value="0" maxlength="10">
+    </div>
+
+    <div class="form-group">
+      <label for="endOfYearBonus">End of Year Bonus:</label>
+      <select id="endOfYearBonus" name="endOfYearBonus">
+        <option value="0">Select Bonus</option>
+        <option value="1">x1</option>
+        <option value="2">x2</option>
+        <option value="3">x3</option>
+        <option value="4">x4</option>
+        <option value="5">x5</option>
+        <option value="6">x6</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="transportationFixed">Fixed Transportation Allowance?</label>
+      <div class="checkbox-group">
+        <input type="checkbox" id="transportationFixed" name="transportationFixed">
+        <label for="transportationFixed">Yes</label>
+      </div>
+    </div>
+
+    <div class="form-group input-dropdown">
+      <label for="ramadanBonusMultiplier">Ramadan Bonus:</label>
+      <select id="ramadanBonusMultiplier" name="ramadanBonusMultiplier">
+        <option value="0">Select Bonus</option>
+        <option value="1">x1</option>
+        <option value="2">x2</option>
+        <option value="3">x3</option>
+        <option value="4">x4</option>
+      </select>
+    </div>
+
+
+    <div class="form-group">
+      <label for="extraBenefits">Enter Extra Benefits:</label>
+      <input type="number" id="extraBenefits" name="extraBenefits" value="0" maxlength="10">
+    </div>
+
+
+    <!-- Add an additional button for Excel export -->
+    <div class="button-container">
+      <button onclick="calculate()">Calculate</button>
+      <button onclick="exportExcel()">Export as Excel</button>
+      <!--  <button onclick="exportCSV()">Export as CSV</button>
+      <button onclick="exportJSON()">Export as JSON</button>
+      <button onclick="exportXML()">Export as XML</button>
+      <button onclick="exportText()">Export as Text</button>  -->
+      <button onclick="clearFields()">Clear</button>
+    </div>
+
+    <div class="results-container">
+      <h2>Results</h2>
+      <p id="basicResult">Basic Salary: </p>
+      <p id="housing">Housing Allowance: </p>
+      <p id="transportation">Transportation Allowance: </p>
+      <p id="fullPackage">Full Package: </p>
+      <p id="analFullPackage">Annual Full Package: </p>
+      <p id="gosi">GOSI: </p>
+      <p id="actualSalary">Actual Salary: </p>
+      <p id="endOfYearBonusResult">End of Year Bonus: </p>
+      <p id="ramadanBonus">Ramadan Bonus: </p>
+      <p id="extraBenefitsResult">Extra Benefits: </p>
+      <p id="annualExtraBenefitsResult">Annual Extra Benefits: </p>
+      <p id="currentAnnualIncomeResult">Current Annual Income: </p>
+      <p id="offerCompanyNameResult">Offer - Company Name: </p>
+      <p id="annualIncome">Annual Income: </p>
+      <p id="incomeDifference">Difference: </p>
+	  <p id="differencePercentage">Difference in %: </p>
+
+    </div>
+
+    <script>
+
+      function calculate() {
+        // Get the user input
+        let basic = parseFloat(document.getElementById('basic').value);
+        let specialAllowance = parseFloat(document.getElementById('specialAllowance').value);
+        let deduction = parseFloat(document.getElementById('deduction').value);
+        let offerCompanyName = document.getElementById('offerCompanyName').value; // Get the value of the "Offer - Company Name" field
+
+        // Get the selected end of year bonus factor
+        let endOfYearBonusFactor = parseFloat(document.getElementById('endOfYearBonus').value);
+
+        // Calculate allowances
+        let housingAllowance = parseFloat((basic * 0.25).toFixed(2));
+
+        let transportationAllowance = 0;
+        if (document.getElementById('transportationFixed').checked) {
+          transportationAllowance = 600;
+        } else {
+          transportationAllowance = parseFloat((basic * 0.10).toFixed(2));
+        }
+
+        // Calculate full package
+        let fullPackage = basic + housingAllowance + transportationAllowance + specialAllowance;
+
+        // Calculate Annual Full Package
+        let annualFullPackage = fullPackage * 12;
+
+
+        // Calculate GOSI
+        let gosi = parseFloat(((basic + housingAllowance) * 0.0975).toFixed(2));
+
+        // Calculate Actual Salary
+        let actualSalary = fullPackage - gosi - deduction;
+
+        // Calculate Ramadan Bonus and add to Annual Income 
+        let ramadanBonusMultiplier = parseFloat(document.getElementById('ramadanBonusMultiplier').value);
+        let ramadanBonus = basic * ramadanBonusMultiplier;
+
+        // Calculate End of Year Bonus
+        //        let endOfYearBonus = basic * endOfYearBonusFactor;
+        let endOfYearBonus = basic * (isNaN(endOfYearBonusFactor) ? 0 : endOfYearBonusFactor);
+
+
+        // Calculate Extra Benefits
+        let extraBenefits = parseFloat(document.getElementById('extraBenefits').value);
+        let annualExtraBenefits = extraBenefits * 12;
+
+        // Calculate Annual Income
+        let annualIncome = (actualSalary * 12) + ramadanBonus + endOfYearBonus;
+
+        // Update Annual Income to include Annual Extra Benefits
+        annualIncome += annualExtraBenefits;
+
+        // Display the results with comma separators for thousands
+        //document.getElementById('basic').innerHTML = "Basic Salary:" + Number(housingAllowance).toLocaleString();
+        document.getElementById('basicResult').innerHTML = "Basic Salary: " + basic.toLocaleString();
+
+        document.getElementById('basicResult').innerHTML = "Basic Salary: " + basic.toLocaleString(); // Display basic salary in the results
+
+        document.getElementById('housing').innerHTML = "Housing Allowance: " + Number(housingAllowance).toLocaleString();
+        document.getElementById('offerCompanyNameResult').innerHTML = "Offer - Company Name: " + offerCompanyName; // Display "Offer - Company Name" in the results
+
+        document.getElementById('transportation').innerHTML = "Transportation Allowance: " + Number(transportationAllowance).toLocaleString();
+        document.getElementById('fullPackage').innerHTML = "Full Package: " + fullPackage.toLocaleString();
+        document.getElementById('analFullPackage').innerHTML = "Annual Full Package: " + annualFullPackage.toLocaleString();
+        document.getElementById('gosi').innerHTML = "GOSI: " + Number(gosi).toLocaleString();
+        document.getElementById('actualSalary').innerHTML = "Actual Salary: " + actualSalary.toLocaleString();
+        document.getElementById('ramadanBonus').innerHTML = "Ramadan Bonus: " + ramadanBonus.toLocaleString();
+        document.getElementById('endOfYearBonusResult').innerHTML = "End of Year Bonus: " + endOfYearBonus.toLocaleString();
+        document.getElementById('extraBenefitsResult').innerHTML = "Extra Benefits: " + extraBenefits.toLocaleString();
+        document.getElementById('annualExtraBenefitsResult').innerHTML = "Annual Extra Benefits: " + annualExtraBenefits.toLocaleString();
+        document.getElementById('annualIncome').innerHTML = "Annual Income: " + annualIncome.toLocaleString();
+        let currentIncome = parseFloat(document.getElementById('currentAnnualIncome').value);
+        let difference = annualIncome - currentIncome;
+
+        document.getElementById('currentAnnualIncomeResult').innerHTML = "Current Annual Income: " + currentIncome.toLocaleString();
+        document.getElementById('incomeDifference').innerHTML = "Difference: " + difference.toLocaleString();
+calculateDifferencePercentage();
+
+      }
+
+      function clearFields() {
+        document.getElementById('offerCompanyName').value = ""; // Clear the "Offer - Company Name" field
+        document.getElementById('offerCompanyNameResult').innerHTML = "Offer - Company Name: ";
+        document.getElementById('basic').value = "";
+        document.getElementById('basicResult').innerHTML = "Basic Salary: ";
+        document.getElementById('specialAllowance').value = "0";
+        document.getElementById('deduction').value = "0";
+        document.getElementById('endOfYearBonus').value = "0";
+        document.getElementById('transportationFixed').checked = false;
+        document.getElementById('ramadanBonusMultiplier').value = "0";
+        document.getElementById('housing').innerHTML = "Housing Allowance: ";
+        document.getElementById('transportation').innerHTML = "Transportation Allowance: ";
+        document.getElementById('fullPackage').innerHTML = "Full Package: ";
+        document.getElementById('analFullPackage').innerHTML = "Annual Full Package: ";
+        document.getElementById('gosi').innerHTML = "GOSI: ";
+        document.getElementById('actualSalary').innerHTML = "Actual Salary: ";
+        document.getElementById('ramadanBonus').innerHTML = "Ramadan Bonus: ";
+        document.getElementById('endOfYearBonusResult').innerHTML = "End of Year Bonus: ";
+        document.getElementById('extraBenefits').value = "0"; // Clear the "Extra Benefits" field
+        document.getElementById('extraBenefitsResult').innerHTML = "Extra Benefits: ";
+        document.getElementById('annualExtraBenefitsResult').innerHTML = "Annual Extra Benefits: ";
+        document.getElementById('annualIncome').innerHTML = "Annual Income: ";
+        document.getElementById('offerCompanyName').value = ""; // Clear the "Offer - Company Name" field
+        document.getElementById('offerCompanyNameResult').innerHTML = "Offer - Company Name: ";
+        document.getElementById('currentAnnualIncome').value = "";
+        document.getElementById('currentAnnualIncomeResult').innerHTML = "Current Annual Income: ";
+        document.getElementById('incomeDifference').innerHTML = "Difference: ";
+        document.getElementById('differencePercentage').innerHTML = "Difference in %: ";
+		
+		
+		
+
+
+
+
+      }
+
+function calculateDifferencePercentage() {
+  let annualIncome = parseFloat(document.getElementById('annualIncome').innerText.split(": ")[1].replace(/,/g, ''));
+  let currentAnnualIncome = parseFloat(document.getElementById('currentAnnualIncome').value);
+  let difference = annualIncome - currentAnnualIncome;
+
+  let differencePercentage = ((difference / currentAnnualIncome) * 100).toFixed(2);
+  document.getElementById('differencePercentage').innerHTML = "Difference in %: " + differencePercentage + "%";
+}
+
+
+      //export code here
+
+
+      // excel start
+      function exportExcel() {
+        // Create a new workbook
+        let workbook = XLSX.utils.book_new();
+
+        // Create a custom worksheet without headers
+        let worksheet = XLSX.utils.aoa_to_sheet([
+
+          ["Basic Allowance", getValueExcel('basicResult')],
+          ["Housing Allowance", getValueExcel('housing')],
+          ["Transportation Allowance", getValueExcel('transportation')],
+          ["Full Package", getValueExcel('fullPackage')],
+          ["Annual Full Package", getValueExcel('analFullPackage')],
+          ["GOSI", getValueExcel('gosi')],
+          ["Actual Salary", getValueExcel('actualSalary')],
+          ["Ramadan Bonus", getValueExcel('ramadanBonus')],
+          ["End of Year Bonus", getValueExcel('endOfYearBonusResult')],
+          ["Extra Benefits", getValueExcel('extraBenefitsResult')],
+          ["Annual Extra Benefits", getValueExcel('annualExtraBenefitsResult')],
+          ["Current Annual Income", getValueExcel('currentAnnualIncomeResult')],
+          ["Offer - Company Name", getCompanyName()],
+          ["Annual Income", getValueExcel('annualIncome')],
+          ["Difference", getValueExcel('incomeDifference')]
+
+
+        ]);
+
+        // Add the worksheet to the workbook
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Salary Calculator");
+
+        // Generate an XLSX file
+        let excelBlob = new Blob([s2ab(XLSX.write(workbook, { type: "binary" }))], { type: "application/octet-stream" });
+
+        // Create a temporary link element
+        let link = document.createElement("a");
+        link.setAttribute("href", URL.createObjectURL(excelBlob));
+        link.setAttribute("download", "Salary Calculator" + " - " + getCompanyName() + ".xlsx");
+        document.body.appendChild(link);
+
+        // Simulate a click on the link to trigger the download
+        link.click();
+
+        // Remove the temporary link element from the document
+        document.body.removeChild(link);
+      }
+
+      function s2ab(s) {
+        let buf = new ArrayBuffer(s.length);
+        let view = new Uint8Array(buf);
+        for (let i = 0; i < s.length; i++) {
+          view[i] = s.charCodeAt(i) & 0xFF;
+        }
+        return buf;
+      }
+      function getValueExcel(id) {
+        // Get the value from the element with the specified ID
+        let value = document.getElementById(id).innerText;
+
+        // Extract the part after the colon (the actual value)
+        value = value.split(":")[1].trim();
+        return value;
+      }
+
+      function getCompanyName() {
+        // Get the value from the element with the specified ID
+        let companyName = document.getElementById('offerCompanyName').value;
+
+        // Check if the value contains a comma and enclose it in double quotes
+        if (companyName.includes(",")) {
+          companyName = '"' + companyName + '"';
+        }
+
+        return companyName;
+      }
+      // excel end
+
+
+
+      function toggleRamadanBonusMultiplier() {
+        let multiplierGroup = document.getElementById('ramadanBonusMultiplierGroup');
+        let checkbox = document.getElementById('ramadanBonusOption');
+
+        if (checkbox.checked) {
+          multiplierGroup.style.display = 'block';
+        } else {
+          multiplierGroup.style.display = 'none';
+        }
+      }
+
+
+
+    </script>
+
+    <!-- Include the SheetJS library -->
+
+</body>
+
+</html>
