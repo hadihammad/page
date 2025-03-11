@@ -5,6 +5,7 @@ function calculateBuyoutLoan() {
     const paid = parseFloat(document.getElementById('paid').value);
     const remainingPrinciple = parseFloat(document.getElementById('remainingPrinciple').value);
     const downpayment = parseFloat(document.getElementById('downpayment').value) || 0; // Default to 0 if empty
+    const moneyNeeded = parseFloat(document.getElementById('moneyNeeded').value) || 0; // Default to 0 if empty
     const percentage = parseFloat(document.getElementById('percentage').value);
     const newMonths = parseFloat(document.getElementById('newMonths').value);
     const adminFeesInput = parseFloat(document.getElementById('adminFees').value);
@@ -13,7 +14,7 @@ function calculateBuyoutLoan() {
     const reminingMonths = months - paid;
     const currentRemaining = installment * reminingMonths;
     const savingBeforeNewLoanProfit = currentRemaining - remainingPrinciple;
-    const remaining = remainingPrinciple - downpayment;
+    const remaining = remainingPrinciple - downpayment + moneyNeeded; // Updated calculation
     const principle = remaining;
     const adminFees = adminFeesInput === 0 ? 0 : principle * 0.01; // Admin fees logic
     const profitPerYear = principle * (percentage / 100);
