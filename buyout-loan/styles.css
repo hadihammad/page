@@ -1,0 +1,101 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Changed to flex-start to allow scrolling */
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px; /* Added padding to prevent content from touching edges */
+    box-sizing: border-box;
+}
+
+.calculator {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Full width */
+    max-width: 600px; /* Maximum width for larger screens */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+}
+
+h1, h2 {
+    text-align: center;
+    margin: 0 0 20px; /* Added margin for spacing */
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold; /* Make labels bold for better readability */
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc; /* Added border for better visibility */
+    border-radius: 4px; /* Rounded corners */
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px; /* Larger font size */
+    margin-top: 10px; /* Added margin for spacing */
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+.results {
+    margin-top: 20px;
+}
+
+.results p {
+    margin: 10px 0; /* Increased margin for better spacing */
+    font-size: 14px; /* Smaller font size for results */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    body {
+        padding: 10px; /* Reduce padding on smaller screens */
+    }
+
+    .calculator {
+        padding: 15px; /* Reduce padding on smaller screens */
+    }
+
+    h1 {
+        font-size: 24px; /* Smaller heading on smaller screens */
+    }
+
+    h2 {
+        font-size: 20px; /* Smaller subheading on smaller screens */
+    }
+
+    input {
+        padding: 6px; /* Smaller padding for inputs on smaller screens */
+    }
+
+    button {
+        padding: 8px; /* Smaller padding for button on smaller screens */
+        font-size: 14px; /* Smaller font size for button */
+    }
+
+    .results p {
+        font-size: 12px; /* Smaller font size for results on smaller screens */
+    }
+}

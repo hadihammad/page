@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyout Loan Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="calculator">
+        <h1>Buyout Loan Calculator</h1>
+        <div class="input-group">
+            <label for="installment">Installment:</label>
+            <input type="number" id="installment" placeholder="Enter installment amount">
+        </div>
+        <div class="input-group">
+            <label for="months">Months:</label>
+            <input type="number" id="months" placeholder="Enter total months">
+        </div>
+        <div class="input-group">
+            <label for="paid">Paid:</label>
+            <input type="number" id="paid" placeholder="Enter paid months">
+        </div>
+        <div class="input-group">
+            <label for="remainingPrinciple">Remaining Principle:</label>
+            <input type="number" id="remainingPrinciple" placeholder="Enter remaining principle">
+        </div>
+        <div class="input-group">
+            <label for="downpayment">Downpayment:</label>
+            <input type="number" id="downpayment" placeholder="Enter downpayment">
+        </div>
+        <div class="input-group">
+            <label for="percentage">Percentage (%):</label>
+            <input type="number" id="percentage" placeholder="Enter interest rate">
+        </div>
+        <div class="input-group">
+            <label for="newMonths">New Months:</label>
+            <input type="number" id="newMonths" placeholder="Enter new loan duration">
+        </div>
+        <div class="input-group">
+            <label for="adminFees">Admin Fees (or 0 for offer):</label>
+            <input type="number" id="adminFees" placeholder="Enter admin fees">
+        </div>
+        <button onclick="calculateBuyoutLoan()">Calculate</button>
+
+        <div class="results">
+            <h2>Results</h2>
+            <p>Remaining Months: <span id="reminingMonths"></span></p>
+            <p>Current Remaining: <span id="currentRemaining"></span></p>
+            <p>Saving Before New Loan Profit: <span id="savingBeforeNewLoanProfit"></span></p>
+            <p>Remaining: <span id="remaining"></span></p>
+            <p>Principle: <span id="principle"></span></p>
+            <p>Admin Fees: <span id="adminFeesResult"></span></p>
+            <p>Profit Per Year: <span id="profitPerYear"></span></p>
+            <p>New Months Formula: <span id="newMonthsFormula"></span></p>
+            <p>Principle Instalment: <span id="principleInstalment"></span></p>
+            <p>Total Months Profits: <span id="totalMonthsProfits"></span></p>
+            <p>Per Month: <span id="perMonth"></span></p>
+            <p>New Installment: <span id="newInstallment"></span></p>
+            <p>Different of New Loan Instalment Amount: <span id="differentNewLoanInstalment"></span></p>
+            <p>Total Loan: <span id="totalLoan"></span></p>
+            <p>Total Loan Profit: <span id="totalLoanProfit"></span></p>
+            <p>Total Cash: <span id="totalCash"></span></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
