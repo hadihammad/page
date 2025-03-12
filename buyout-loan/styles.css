@@ -59,43 +59,74 @@ button:hover {
     background-color: #218838;
 }
 
-.results {
+.results, .results-inputs {
     margin-top: 20px;
 }
 
-.results p {
+.results p, .results-inputs p {
     margin: 10px 0;
     font-size: 14px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
+#differenceDBR {
+    padding: 5px;
+    border-radius: 4px;
+    display: inline-block;
+}
 
-    .calculator {
-        padding: 15px;
-    }
+.green-bg {
+    background-color: #d4edda; /* Light green */
+    color: #155724; /* Dark green */
+}
 
-    h1 {
-        font-size: 24px;
-    }
+.orange-bg {
+    background-color: #fff3cd; /* Light orange */
+    color: #856404; /* Dark orange */
+}
 
-    h2 {
-        font-size: 20px;
-    }
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 10px 0;
+}
 
-    input {
-        padding: 6px;
-    }
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
 
-    button {
-        padding: 8px;
-        font-size: 14px;
-    }
+.radio-checkmark {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #28a745;
+    border-radius: 50%;
+    position: relative;
+}
 
-    .results p {
-        font-size: 12px;
-    }
+.radio-checkmark::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background-color: #28a745;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"]:checked + .radio-checkmark::after {
+    display: block;
+}
+
+.hidden {
+    display: none;
 }

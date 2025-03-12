@@ -9,10 +9,20 @@
 <body>
     <div class="calculator">
         <h1>Buyout Loan Calculator</h1>
+
+        <!-- Salary Field (moved to top) -->
+        <div class="input-group">
+            <label for="salary">Salary:</label>
+            <input type="text" id="salary" placeholder="Enter your salary" oninput="formatNumberInput(this)">
+        </div>
+
+        <!-- Installment Field -->
         <div class="input-group">
             <label for="installment">Installment:</label>
-            <input type="number" id="installment" placeholder="Enter installment amount">
+            <input type="text" id="installment" placeholder="Enter installment amount" oninput="formatNumberInput(this)">
         </div>
+
+        <!-- Other Input Fields -->
         <div class="input-group">
             <label for="months">Months:</label>
             <input type="number" id="months" placeholder="Enter total months">
@@ -23,15 +33,15 @@
         </div>
         <div class="input-group">
             <label for="remainingPrinciple">Remaining Principle:</label>
-            <input type="number" id="remainingPrinciple" placeholder="Enter remaining principle">
+            <input type="text" id="remainingPrinciple" placeholder="Enter remaining principle" oninput="formatNumberInput(this)">
         </div>
         <div class="input-group">
             <label for="downpayment">Downpayment:</label>
-            <input type="number" id="downpayment" placeholder="Enter downpayment">
+            <input type="text" id="downpayment" placeholder="Enter downpayment" oninput="formatNumberInput(this)">
         </div>
         <div class="input-group">
             <label for="moneyNeeded">Money Needed:</label>
-            <input type="number" id="moneyNeeded" placeholder="Enter money needed">
+            <input type="text" id="moneyNeeded" placeholder="Enter money needed" oninput="formatNumberInput(this)">
         </div>
         <div class="input-group">
             <label for="percentage">Percentage (%):</label>
@@ -41,12 +51,49 @@
             <label for="newMonths">New Months:</label>
             <input type="number" id="newMonths" placeholder="Enter new loan duration">
         </div>
+
+        <!-- Administration Fees Radio Options -->
         <div class="input-group">
-            <label for="adminFees">Admin Fees (or 0 for offer):</label>
-            <input type="number" id="adminFees" placeholder="Enter admin fees">
+            <label>Administration Fees:</label>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="adminFees" value="offer" checked onclick="toggleCustomFees()">
+                    <span class="radio-checkmark"></span>
+                    Offer (0 fees)
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="adminFees" value="standard" onclick="toggleCustomFees()">
+                    <span class="radio-checkmark"></span>
+                    1% of Principle (max 5000)
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="adminFees" value="custom" onclick="toggleCustomFees()">
+                    <span class="radio-checkmark"></span>
+                    Custom Fees
+                </label>
+            </div>
+            <input type="text" id="customFees" class="hidden" placeholder="Enter custom fees" oninput="formatNumberInput(this)">
         </div>
+
+        <!-- Calculate Button -->
         <button onclick="calculateBuyoutLoan()">Calculate</button>
 
+        <!-- Input Fields in Results -->
+        <div class="results-inputs">
+            <h2>Input Summary</h2>
+            <p>Salary: <span id="inputSalary"></span></p>
+            <p>Installment: <span id="inputInstallment"></span></p>
+            <p>Months: <span id="inputMonths"></span></p>
+            <p>Paid: <span id="inputPaid"></span></p>
+            <p>Remaining Principle: <span id="inputRemainingPrinciple"></span></p>
+            <p>Downpayment: <span id="inputDownpayment"></span></p>
+            <p>Money Needed: <span id="inputMoneyNeeded"></span></p>
+            <p>Percentage: <span id="inputPercentage"></span>%</p>
+            <p>New Months: <span id="inputNewMonths"></span></p>
+            <p>Admin Fees: <span id="inputAdminFees"></span></p>
+        </div>
+
+        <!-- Results Section -->
         <div class="results">
             <h2>Results</h2>
             <p>Remaining Months: <span id="reminingMonths"></span></p>
@@ -65,6 +112,9 @@
             <p>Total Loan: <span id="totalLoan"></span></p>
             <p>Total Loan Profit: <span id="totalLoanProfit"></span></p>
             <p>Total Cash: <span id="totalCash"></span></p>
+            <p>Old DBR: <span id="oldDBR"></span></p>
+            <p>New DBR: <span id="newDBR"></span></p>
+            <p>Difference in DBR: <span id="differenceDBR"></span></p>
         </div>
     </div>
 
