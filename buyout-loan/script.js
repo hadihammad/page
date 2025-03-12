@@ -5,47 +5,78 @@ function toggleCustomFees() {
 }
 
 function formatNumberInput(input) {
-    // Remove non-numeric characters except decimal point
-    let value = input.value.replace(/[^0-9.]/g, '');
-
-    // Ensure only one decimal point
-    const decimalCount = value.split('.').length - 1;
-    if (decimalCount > 1) {
-        value = value.substring(0, value.lastIndexOf('.'));
+    // Track cursor position and original value
+    const cursorPosition = input.selectionStart;
+    const originalValue = input.value;
+    
+    // Remove all non-numeric characters except decimal point
+    let newValue = originalValue.replace(/[^0-9.]/g, '');
+    
+    // Handle multiple decimal points
+    const decimalSplit = newValue.split('.');
+    if (decimalSplit.length > 2) {
+        newValue = decimalSplit[0] + '.' + decimalSplit.slice(1).join('');
     }
-
-    // Format with commas and two decimal places
-    if (value !== '' && value !== '.') {
-        const [integer, decimal] = value.split('.');
-        const formattedInteger = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        const formattedDecimal = decimal ? `.${decimal.substring(0, 2)}` : '';
-        input.value = formattedInteger + formattedDecimal;
+    
+    // Split into integer and decimal parts
+    const [integer, decimal] = newValue.split('.');
+    
+    // Format integer part with commas
+    const formattedInteger = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
+    // Build new formatted value
+    let formattedValue = formattedInteger;
+    if (decimal !== undefined) {
+        formattedValue += `.${decimal.substring(0, 2)}`;
     }
+    
+    // Calculate cursor offset
+    let cursorOffset = 0;
+    const originalNumbers = originalValue.slice(0, cursorPosition).replace(/[^0-9]/g, '');
+    const newNumbers = formattedValue.replace(/[^0-9]/g, '');
+    
+    // Count commas before cursor in original value
+    const originalCommas = (originalValue.slice(0, cursorPosition).match(/,/g) || []).length;
+    
+    // Count commas before cursor in new value
+    const newCommas = (formattedValue.slice(0, cursorPosition + cursorOffset).match(/,/g) || []).length;
+    
+    cursorOffset = newCommas - originalCommas;
+    
+    // Update input value
+    input.value = formattedValue;
+    
+    // Set new cursor position
+    const newCursorPosition = cursorPosition + cursorOffset;
+    input.setSelectionRange(newCursorPosition, newCursorPosition);
 }
 
 function calculateBuyoutLoan() {
-    // Get user inputs and remove commas
-    const salary = parseFloat(document.getElementById('salary').value.replace(/,/g, '')) || 0;
-    const installment = parseFloat(document.getElementById('installment').value.replace(/,/g, '')) || 0;
+    // Get user inputs and remove formatting
+    const getCleanValue = (id) => parseFloat(document.getElementById(id).value.replace(/,/g, '')) || 0;
+    
+    const salary = getCleanValue('salary');
+    const installment = getCleanValue('installment');
     const months = parseFloat(document.getElementById('months').value);
     const paid = parseFloat(document.getElementById('paid').value);
-    const remainingPrinciple = parseFloat(document.getElementById('remainingPrinciple').value.replace(/,/g, '')) || 0;
-    const downpayment = parseFloat(document.getElementById('downpayment').value.replace(/,/g, '')) || 0;
-    const moneyNeeded = parseFloat(document.getElementById('moneyNeeded').value.replace(/,/g, '')) || 0;
+    const remainingPrinciple = getCleanValue('remainingPrinciple');
+    const downpayment = getCleanValue('downpayment');
+    const moneyNeeded = getCleanValue('moneyNeeded');
     const percentage = parseFloat(document.getElementById('percentage').value);
     const newMonths = parseFloat(document.getElementById('newMonths').value);
 
-    // Get administration fees option
+    // Admin fees calculation
     const adminFeeOption = document.querySelector('input[name="adminFees"]:checked').value;
     let adminFees = 0;
-    const adminFeesBase = remainingPrinciple + (moneyNeeded || 0); // Updated calculation
+    const adminFeesBase = remainingPrinciple + moneyNeeded;
+    
     if (adminFeeOption === 'standard') {
         adminFees = Math.min(adminFeesBase * 0.01, 5000);
     } else if (adminFeeOption === 'custom') {
-        adminFees = parseFloat(document.getElementById('customFees').value.replace(/,/g, '')) || 0;
+        adminFees = getCleanValue('customFees');
     }
 
-    // Perform calculations
+    // Core calculations
     const reminingMonths = months - paid;
     const currentRemaining = installment * reminingMonths;
     const savingBeforeNewLoanProfit = currentRemaining - remainingPrinciple;
@@ -62,55 +93,59 @@ function calculateBuyoutLoan() {
     const totalLoanProfit = adminFees + totalMonthsProfits;
     const totalCash = principle - adminFees;
 
-    // Calculate DBR
+    // DBR calculations
     const oldDBR = installment / salary;
     const newDBR = newInstallment / salary;
     const differenceDBR = oldDBR - newDBR;
 
-    // Format numbers with comma separators
+    // Formatting helper
     const formatNumber = (num) => num.toLocaleString('en-US', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
 
     // Display input summary
-    document.getElementById('inputSalary').textContent = formatNumber(salary);
-    document.getElementById('inputInstallment').textContent = formatNumber(installment);
-    document.getElementById('inputMonths').textContent = formatNumber(months);
-    document.getElementById('inputPaid').textContent = formatNumber(paid);
-    document.getElementById('inputRemainingPrinciple').textContent = formatNumber(remainingPrinciple);
-    document.getElementById('inputDownpayment').textContent = formatNumber(downpayment);
-    document.getElementById('inputMoneyNeeded').textContent = formatNumber(moneyNeeded);
+    const displayInput = (id, value) => {
+        document.getElementById(id).textContent = formatNumber(value);
+    };
+    
+    displayInput('inputSalary', salary);
+    displayInput('inputInstallment', installment);
+    displayInput('inputMonths', months);
+    displayInput('inputPaid', paid);
+    displayInput('inputRemainingPrinciple', remainingPrinciple);
+    displayInput('inputDownpayment', downpayment);
+    displayInput('inputMoneyNeeded', moneyNeeded);
     document.getElementById('inputPercentage').textContent = percentage;
-    document.getElementById('inputNewMonths').textContent = formatNumber(newMonths);
-    document.getElementById('inputAdminFees').textContent = formatNumber(adminFees);
+    displayInput('inputNewMonths', newMonths);
+    displayInput('inputAdminFees', adminFees);
 
     // Display results
-    document.getElementById('reminingMonths').textContent = formatNumber(reminingMonths);
-    document.getElementById('currentRemaining').textContent = formatNumber(currentRemaining);
-    document.getElementById('savingBeforeNewLoanProfit').textContent = formatNumber(savingBeforeNewLoanProfit);
-    document.getElementById('remaining').textContent = formatNumber(remaining);
-    document.getElementById('principle').textContent = formatNumber(principle);
-    document.getElementById('adminFeesResult').textContent = formatNumber(adminFees);
-    document.getElementById('profitPerYear').textContent = formatNumber(profitPerYear);
-    document.getElementById('newMonthsFormula').textContent = formatNumber(newMonthsFormula);
-    document.getElementById('principleInstalment').textContent = formatNumber(principleInstalment);
-    document.getElementById('totalMonthsProfits').textContent = formatNumber(totalMonthsProfits);
-    document.getElementById('perMonth').textContent = formatNumber(perMonth);
-    document.getElementById('newInstallment').textContent = formatNumber(newInstallment);
-    document.getElementById('differentNewLoanInstalment').textContent = formatNumber(differentNewLoanInstalment);
-    document.getElementById('totalLoan').textContent = formatNumber(totalLoan);
-    document.getElementById('totalLoanProfit').textContent = formatNumber(totalLoanProfit);
-    document.getElementById('totalCash').textContent = formatNumber(totalCash);
-    document.getElementById('oldDBR').textContent = formatNumber(oldDBR);
-    document.getElementById('newDBR').textContent = formatNumber(newDBR);
-    document.getElementById('differenceDBR').textContent = formatNumber(differenceDBR);
+    const displayResult = (id, value) => {
+        document.getElementById(id).textContent = formatNumber(value);
+    };
+    
+    displayResult('reminingMonths', reminingMonths);
+    displayResult('currentRemaining', currentRemaining);
+    displayResult('savingBeforeNewLoanProfit', savingBeforeNewLoanProfit);
+    displayResult('remaining', remaining);
+    displayResult('principle', principle);
+    displayResult('adminFeesResult', adminFees);
+    displayResult('profitPerYear', profitPerYear);
+    displayResult('newMonthsFormula', newMonthsFormula);
+    displayResult('principleInstalment', principleInstalment);
+    displayResult('totalMonthsProfits', totalMonthsProfits);
+    displayResult('perMonth', perMonth);
+    displayResult('newInstallment', newInstallment);
+    displayResult('differentNewLoanInstalment', differentNewLoanInstalment);
+    displayResult('totalLoan', totalLoan);
+    displayResult('totalLoanProfit', totalLoanProfit);
+    displayResult('totalCash', totalCash);
+    displayResult('oldDBR', oldDBR);
+    displayResult('newDBR', newDBR);
+    displayResult('differenceDBR', differenceDBR);
 
-    // Set background color for Difference in DBR
+    // DBR color coding
     const differenceDBRElement = document.getElementById('differenceDBR');
-    if (differenceDBR > 0) {
-        differenceDBRElement.className = 'green-bg'; // Old DBR is bigger
-    } else {
-        differenceDBRElement.className = 'orange-bg'; // New DBR is bigger or equal
-    }
+    differenceDBRElement.className = differenceDBR > 0 ? 'green-bg' : 'orange-bg';
 }
