@@ -1,0 +1,158 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.calculator {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+#results {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.result-item {
+    margin-bottom: 10px;
+}
+
+.result-item strong {
+    display: inline-block;
+    width: 180px;
+}
+
+.dbr-green {
+    background-color: green;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.dbr-yellow {
+    background-color: yellow;
+    color: black;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.dbr-orange {
+    background-color: orange;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.dbr-red {
+    background-color: red;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+/* Sector Radio Buttons Styling */
+.sector-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.sector-option {
+    flex: 1;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sector-option:hover {
+    border-color: #28a745;
+    background-color: #f0fff0;
+}
+
+.sector-option input[type="radio"] {
+    display: none;
+}
+
+.sector-option span {
+    font-size: 16px;
+    color: #333;
+}
+
+.sector-option input[type="radio"]:checked + span {
+    font-weight: bold;
+    color: #28a745;
+}
+
+.sector-option input[type="radio"]:checked ~ .sector-option {
+    border-color: #28a745;
+    background-color: #e0ffe0;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    .calculator {
+        padding: 15px;
+    }
+
+    input[type="number"] {
+        padding: 6px;
+    }
+
+    button {
+        padding: 8px;
+    }
+}
