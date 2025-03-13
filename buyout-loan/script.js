@@ -68,13 +68,16 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
         moneyNeededFields.appendChild(field);
 
-        field.querySelector('.removeMoneyNeeded').addEventListener('click', function () {
-            moneyNeededFields.removeChild(field);
+        // Add comma separator to new money needed fields
+        const moneyNeededValueInput = field.querySelector('.moneyNeededValue');
+        moneyNeededValueInput.addEventListener('input', function () {
+            this.value = formatNumberWithCommas(this.value.replace(/,/g, ''));
             updateInputSummary();
             calculate();
         });
 
-        field.querySelector('.moneyNeededValue').addEventListener('input', function () {
+        field.querySelector('.removeMoneyNeeded').addEventListener('click', function () {
+            moneyNeededFields.removeChild(field);
             updateInputSummary();
             calculate();
         });
@@ -107,7 +110,18 @@ document.addEventListener('DOMContentLoaded', function () {
             summary += `<div>${text}: ${formatNumberWithCommas(value)}</div>`;
         });
 
-        inputSummary.innerHTML = summary;
+        inputSummary.innerHTML = `
+            <div>Salary: ${salary.value}</div>
+            <div>Installment: ${installment.value}</div>
+            <div>Months: ${months.value}</div>
+            <div>Paid: ${paid.value}</div>
+            <div>Remaining Principle: ${remainingPrinciple.value}</div>
+            <div>Downpayment: ${downpayment.value}</div>
+            <div>Percentage: ${percentage.value}</div>
+            <div>New Months: ${newMonths.value}</div>
+            <div>Money Needed: ${summary}</div>
+            <div>Admin Fees: ${adminFeesResult.value}</div>
+        `;
     }
 
     // Main calculation function
@@ -152,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const newDBRValue = roundToTwoDecimals(newInstallmentValue / salaryValue);
         const differenceDBRValue = roundToTwoDecimals(oldDBRValue - newDBRValue);
 
+        // Update results
         reminingMonths.value = reminingMonthsValue.toLocaleString();
         currentRemaining.value = formatNumberWithCommas(currentRemainingValue);
         savingBeforeNewLoanProfit.value = formatNumberWithCommas(savingBeforeNewLoanProfitValue);
@@ -172,10 +187,14 @@ document.addEventListener('DOMContentLoaded', function () {
         newDBR.value = newDBRValue.toFixed(2);
         differenceDBR.value = differenceDBRValue.toFixed(2);
 
+        // Update DBR background color
         if (differenceDBRValue > 0) {
             differenceDBR.style.backgroundColor = 'green';
         } else {
             differenceDBR.style.backgroundColor = 'orange';
         }
+
+        // Update input summary
+        updateInputSummary();
     }
 });
