@@ -3,121 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buyout Loan Calculator</title>
+    <title>Loan Buyout Calculator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="calculator">
-        <h1>Buyout Loan Calculator</h1>
-
-        <!-- Salary Field (moved to top) -->
-        <div class="input-group">
+    <div class="container">
+        <h1>Loan Buyout Calculator</h1>
+        <div class="input-section">
             <label for="salary">Salary:</label>
-            <input type="text" id="salary" placeholder="Enter your salary" oninput="formatNumberInput(this)">
-        </div>
+            <input type="text" id="salary" class="amount-input" placeholder="Enter Salary">
 
-        <!-- Installment Field -->
-        <div class="input-group">
             <label for="installment">Installment:</label>
-            <input type="text" id="installment" placeholder="Enter installment amount" oninput="formatNumberInput(this)">
-        </div>
+            <input type="text" id="installment" class="amount-input" placeholder="Enter Installment">
 
-        <!-- Other Input Fields -->
-        <div class="input-group">
             <label for="months">Months:</label>
-            <input type="number" id="months" placeholder="Enter total months">
-        </div>
-        <div class="input-group">
+            <input type="number" id="months" placeholder="Enter Months">
+
             <label for="paid">Paid:</label>
-            <input type="number" id="paid" placeholder="Enter paid months">
-        </div>
-        <div class="input-group">
+            <input type="number" id="paid" placeholder="Enter Paid">
+
             <label for="remainingPrinciple">Remaining Principle:</label>
-            <input type="text" id="remainingPrinciple" placeholder="Enter remaining principle" oninput="formatNumberInput(this)">
-        </div>
-        <div class="input-group">
+            <input type="text" id="remainingPrinciple" class="amount-input" placeholder="Enter Remaining Principle">
+
             <label for="downpayment">Downpayment:</label>
-            <input type="text" id="downpayment" placeholder="Enter downpayment" oninput="formatNumberInput(this)">
-        </div>
-        <div class="input-group">
-            <label for="moneyNeeded">Money Needed:</label>
-            <input type="text" id="moneyNeeded" placeholder="Enter money needed" oninput="formatNumberInput(this)">
-        </div>
-        <div class="input-group">
-            <label for="percentage">Percentage (%):</label>
-            <input type="number" id="percentage" placeholder="Enter interest rate">
-        </div>
-        <div class="input-group">
+            <input type="text" id="downpayment" class="amount-input" placeholder="Enter Downpayment">
+
+            <label for="percentage">Percentage:</label>
+            <input type="number" id="percentage" placeholder="Enter Percentage">
+
             <label for="newMonths">New Months:</label>
-            <input type="number" id="newMonths" placeholder="Enter new loan duration">
-        </div>
+            <input type="number" id="newMonths" placeholder="Enter New Months">
 
-        <!-- Administration Fees Radio Options -->
-        <div class="input-group">
-            <label>Administration Fees:</label>
-            <div class="radio-group">
-                <label class="radio-option">
-                    <input type="radio" name="adminFees" value="offer" checked onclick="toggleCustomFees()">
-                    <span class="radio-checkmark"></span>
-                    Offer (0 fees)
-                </label>
-                <label class="radio-option">
-                    <input type="radio" name="adminFees" value="standard" onclick="toggleCustomFees()">
-                    <span class="radio-checkmark"></span>
-                    1% of Principle (max 5000)
-                </label>
-                <label class="radio-option">
-                    <input type="radio" name="adminFees" value="custom" onclick="toggleCustomFees()">
-                    <span class="radio-checkmark"></span>
-                    Custom Fees
-                </label>
+            <div class="money-needed">
+                <button id="addMoneyNeeded">Add Money Needed</button>
+                <div id="moneyNeededFields"></div>
             </div>
-            <input type="text" id="customFees" class="hidden" placeholder="Enter custom fees" oninput="formatNumberInput(this)">
+
+            <label for="adminFees">Admin Fees:</label>
+            <div class="radio-buttons">
+                <label><input type="radio" name="adminFees" value="0" checked> Offer (0 Fees)</label>
+                <label><input type="radio" name="adminFees" value="1"> 1% of Principle (Max 5000)</label>
+                <label><input type="radio" name="adminFees" value="custom"> Custom Fees</label>
+            </div>
+            <input type="text" id="customFees" class="amount-input" placeholder="Enter Custom Fees" style="display: none;">
         </div>
 
-        <!-- Calculate Button -->
-        <button onclick="calculateBuyoutLoan()">Calculate</button>
-
-        <!-- Input Fields in Results -->
-        <div class="results-inputs">
-            <h2>Input Summary</h2>
-            <p>Salary: <span id="inputSalary"></span></p>
-            <p>Installment: <span id="inputInstallment"></span></p>
-            <p>Months: <span id="inputMonths"></span></p>
-            <p>Paid: <span id="inputPaid"></span></p>
-            <p>Remaining Principle: <span id="inputRemainingPrinciple"></span></p>
-            <p>Downpayment: <span id="inputDownpayment"></span></p>
-            <p>Money Needed: <span id="inputMoneyNeeded"></span></p>
-            <p>Percentage: <span id="inputPercentage"></span>%</p>
-            <p>New Months: <span id="inputNewMonths"></span></p>
-            <p>Admin Fees: <span id="inputAdminFees"></span></p>
-        </div>
-
-        <!-- Results Section -->
-        <div class="results">
+        <div class="result-section">
             <h2>Results</h2>
-            <p>Remaining Months: <span id="reminingMonths"></span></p>
-            <p>Current Remaining: <span id="currentRemaining"></span></p>
-            <p>Saving Before New Loan Profit: <span id="savingBeforeNewLoanProfit"></span></p>
-            <p>Remaining: <span id="remaining"></span></p>
-            <p>Principle: <span id="principle"></span></p>
-            <p>Admin Fees: <span id="adminFeesResult"></span></p>
-            <p>Profit Per Year: <span id="profitPerYear"></span></p>
-            <p>New Months Formula: <span id="newMonthsFormula"></span></p>
-            <p>Principle Instalment: <span id="principleInstalment"></span></p>
-            <p>Total Months Profits: <span id="totalMonthsProfits"></span></p>
-            <p>Per Month: <span id="perMonth"></span></p>
-            <p>New Installment: <span id="newInstallment"></span></p>
-            <p>Different of New Loan Instalment Amount: <span id="differentNewLoanInstalment"></span></p>
-            <p>Total Loan: <span id="totalLoan"></span></p>
-            <p>Total Loan Profit: <span id="totalLoanProfit"></span></p>
-            <p>Total Cash: <span id="totalCash"></span></p>
-            <p>Old DBR: <span id="oldDBR"></span></p>
-            <p>New DBR: <span id="newDBR"></span></p>
-            <p>Difference in DBR: <span id="differenceDBR"></span></p>
+            <div class="input-summary">
+                <h3>Input Summary</h3>
+                <div id="inputSummary"></div>
+            </div>
+            <div class="results">
+                <label for="reminingMonths">Remining Months:</label>
+                <input type="text" id="reminingMonths" readonly>
+
+                <label for="currentRemaining">Current Remaining:</label>
+                <input type="text" id="currentRemaining" readonly>
+
+                <label for="savingBeforeNewLoanProfit">Saving Before New Loan Profit:</label>
+                <input type="text" id="savingBeforeNewLoanProfit" readonly>
+
+                <label for="remaining">Remaining:</label>
+                <input type="text" id="remaining" readonly>
+
+                <label for="principle">Principle:</label>
+                <input type="text" id="principle" readonly>
+
+                <label for="adminFeesResult">Admin Fees:</label>
+                <input type="text" id="adminFeesResult" readonly>
+
+                <label for="profitPerYear">Profit Per Year:</label>
+                <input type="text" id="profitPerYear" readonly>
+
+                <label for="newMonthsFormula">New Months Formula:</label>
+                <input type="text" id="newMonthsFormula" readonly>
+
+                <label for="principleInstalment">Principle Instalment:</label>
+                <input type="text" id="principleInstalment" readonly>
+
+                <label for="totalMonthsProfits">Total Months Profits:</label>
+                <input type="text" id="totalMonthsProfits" readonly>
+
+                <label for="perMonth">Per Month:</label>
+                <input type="text" id="perMonth" readonly>
+
+                <label for="newInstallment">New Installment:</label>
+                <input type="text" id="newInstallment" readonly>
+
+                <label for="differentOfNewLoanInstalmentAmount">Different of New Loan Instalment Amount:</label>
+                <input type="text" id="differentOfNewLoanInstalmentAmount" readonly>
+
+                <label for="totalLoan">Total Loan:</label>
+                <input type="text" id="totalLoan" readonly>
+
+                <label for="totalLoanProfit">Total Loan Profit:</label>
+                <input type="text" id="totalLoanProfit" readonly>
+
+                <label for="totalCash">Total Cash:</label>
+                <input type="text" id="totalCash" readonly>
+
+                <label for="oldDBR">Old DBR:</label>
+                <input type="text" id="oldDBR" readonly>
+
+                <label for="newDBR">New DBR:</label>
+                <input type="text" id="newDBR" readonly>
+
+                <label for="differenceDBR">Difference in DBR:</label>
+                <input type="text" id="differenceDBR" readonly>
+            </div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>

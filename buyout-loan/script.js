@@ -1,151 +1,181 @@
-function toggleCustomFees() {
-    const customFeesInput = document.getElementById('customFees');
-    const customRadio = document.querySelector('input[name="adminFees"][value="custom"]');
-    customFeesInput.classList.toggle('hidden', !customRadio.checked);
-}
+document.addEventListener('DOMContentLoaded', function () {
+    const amountInputs = document.querySelectorAll('.amount-input');
+    const salary = document.getElementById('salary');
+    const installment = document.getElementById('installment');
+    const months = document.getElementById('months');
+    const paid = document.getElementById('paid');
+    const remainingPrinciple = document.getElementById('remainingPrinciple');
+    const downpayment = document.getElementById('downpayment');
+    const percentage = document.getElementById('percentage');
+    const newMonths = document.getElementById('newMonths');
+    const addMoneyNeeded = document.getElementById('addMoneyNeeded');
+    const moneyNeededFields = document.getElementById('moneyNeededFields');
+    const adminFeesRadios = document.querySelectorAll('input[name="adminFees"]');
+    const customFees = document.getElementById('customFees');
+    const inputSummary = document.getElementById('inputSummary');
 
-function formatNumberInput(input) {
-    // Track cursor position and original value
-    const cursorPosition = input.selectionStart;
-    const originalValue = input.value;
-    
-    // Remove all non-numeric characters except decimal point
-    let newValue = originalValue.replace(/[^0-9.]/g, '');
-    
-    // Handle multiple decimal points
-    const decimalSplit = newValue.split('.');
-    if (decimalSplit.length > 2) {
-        newValue = decimalSplit[0] + '.' + decimalSplit.slice(1).join('');
-    }
-    
-    // Split into integer and decimal parts
-    const [integer, decimal] = newValue.split('.');
-    
-    // Format integer part with commas
-    const formattedInteger = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    
-    // Build new formatted value
-    let formattedValue = formattedInteger;
-    if (decimal !== undefined) {
-        formattedValue += `.${decimal.substring(0, 2)}`;
-    }
-    
-    // Calculate cursor offset
-    let cursorOffset = 0;
-    const originalNumbers = originalValue.slice(0, cursorPosition).replace(/[^0-9]/g, '');
-    const newNumbers = formattedValue.replace(/[^0-9]/g, '');
-    
-    // Count commas before cursor in original value
-    const originalCommas = (originalValue.slice(0, cursorPosition).match(/,/g) || []).length;
-    
-    // Count commas before cursor in new value
-    const newCommas = (formattedValue.slice(0, cursorPosition + cursorOffset).match(/,/g) || []).length;
-    
-    cursorOffset = newCommas - originalCommas;
-    
-    // Update input value
-    input.value = formattedValue;
-    
-    // Set new cursor position
-    const newCursorPosition = cursorPosition + cursorOffset;
-    input.setSelectionRange(newCursorPosition, newCursorPosition);
-}
+    const reminingMonths = document.getElementById('reminingMonths');
+    const currentRemaining = document.getElementById('currentRemaining');
+    const savingBeforeNewLoanProfit = document.getElementById('savingBeforeNewLoanProfit');
+    const remaining = document.getElementById('remaining');
+    const principle = document.getElementById('principle');
+    const adminFeesResult = document.getElementById('adminFeesResult');
+    const profitPerYear = document.getElementById('profitPerYear');
+    const newMonthsFormula = document.getElementById('newMonthsFormula');
+    const principleInstalment = document.getElementById('principleInstalment');
+    const totalMonthsProfits = document.getElementById('totalMonthsProfits');
+    const perMonth = document.getElementById('perMonth');
+    const newInstallment = document.getElementById('newInstallment');
+    const differentOfNewLoanInstalmentAmount = document.getElementById('differentOfNewLoanInstalmentAmount');
+    const totalLoan = document.getElementById('totalLoan');
+    const totalLoanProfit = document.getElementById('totalLoanProfit');
+    const totalCash = document.getElementById('totalCash');
+    const oldDBR = document.getElementById('oldDBR');
+    const newDBR = document.getElementById('newDBR');
+    const differenceDBR = document.getElementById('differenceDBR');
 
-function calculateBuyoutLoan() {
-    // Get user inputs and remove formatting
-    const getCleanValue = (id) => parseFloat(document.getElementById(id).value.replace(/,/g, '')) || 0;
-    
-    const salary = getCleanValue('salary');
-    const installment = getCleanValue('installment');
-    const months = parseFloat(document.getElementById('months').value);
-    const paid = parseFloat(document.getElementById('paid').value);
-    const remainingPrinciple = getCleanValue('remainingPrinciple');
-    const downpayment = getCleanValue('downpayment');
-    const moneyNeeded = getCleanValue('moneyNeeded');
-    const percentage = parseFloat(document.getElementById('percentage').value);
-    const newMonths = parseFloat(document.getElementById('newMonths').value);
+    let moneyNeededValues = [];
 
-    // Admin fees calculation
-    const adminFeeOption = document.querySelector('input[name="adminFees"]:checked').value;
-    let adminFees = 0;
-    const adminFeesBase = remainingPrinciple + moneyNeeded;
-    
-    if (adminFeeOption === 'standard') {
-        adminFees = Math.min(adminFeesBase * 0.01, 5000);
-    } else if (adminFeeOption === 'custom') {
-        adminFees = getCleanValue('customFees');
-    }
-
-    // Core calculations
-    const reminingMonths = months - paid;
-    const currentRemaining = installment * reminingMonths;
-    const savingBeforeNewLoanProfit = currentRemaining - remainingPrinciple;
-    const remaining = remainingPrinciple - downpayment + moneyNeeded;
-    const principle = remaining;
-    const profitPerYear = principle * (percentage / 100);
-    const newMonthsFormula = newMonths / 12;
-    const principleInstalment = principle / newMonths;
-    const totalMonthsProfits = profitPerYear * newMonthsFormula;
-    const perMonth = totalMonthsProfits / newMonths;
-    const newInstallment = principleInstalment + perMonth;
-    const differentNewLoanInstalment = installment - newInstallment;
-    const totalLoan = principle + totalMonthsProfits;
-    const totalLoanProfit = adminFees + totalMonthsProfits;
-    const totalCash = principle - adminFees;
-
-    // DBR calculations
-    const oldDBR = installment / salary;
-    const newDBR = newInstallment / salary;
-    const differenceDBR = oldDBR - newDBR;
-
-    // Formatting helper
-    const formatNumber = (num) => num.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+    // Add comma separators to amount inputs
+    amountInputs.forEach(input => {
+        input.addEventListener('input', function () {
+            this.value = formatNumberWithCommas(this.value.replace(/,/g, ''));
+        });
     });
 
-    // Display input summary
-    const displayInput = (id, value) => {
-        document.getElementById(id).textContent = formatNumber(value);
-    };
-    
-    displayInput('inputSalary', salary);
-    displayInput('inputInstallment', installment);
-    displayInput('inputMonths', months);
-    displayInput('inputPaid', paid);
-    displayInput('inputRemainingPrinciple', remainingPrinciple);
-    displayInput('inputDownpayment', downpayment);
-    displayInput('inputMoneyNeeded', moneyNeeded);
-    document.getElementById('inputPercentage').textContent = percentage;
-    displayInput('inputNewMonths', newMonths);
-    displayInput('inputAdminFees', adminFees);
+    // Format number with commas
+    function formatNumberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
 
-    // Display results
-    const displayResult = (id, value) => {
-        document.getElementById(id).textContent = formatNumber(value);
-    };
-    
-    displayResult('reminingMonths', reminingMonths);
-    displayResult('currentRemaining', currentRemaining);
-    displayResult('savingBeforeNewLoanProfit', savingBeforeNewLoanProfit);
-    displayResult('remaining', remaining);
-    displayResult('principle', principle);
-    displayResult('adminFeesResult', adminFees);
-    displayResult('profitPerYear', profitPerYear);
-    displayResult('newMonthsFormula', newMonthsFormula);
-    displayResult('principleInstalment', principleInstalment);
-    displayResult('totalMonthsProfits', totalMonthsProfits);
-    displayResult('perMonth', perMonth);
-    displayResult('newInstallment', newInstallment);
-    displayResult('differentNewLoanInstalment', differentNewLoanInstalment);
-    displayResult('totalLoan', totalLoan);
-    displayResult('totalLoanProfit', totalLoanProfit);
-    displayResult('totalCash', totalCash);
-    displayResult('oldDBR', oldDBR);
-    displayResult('newDBR', newDBR);
-    displayResult('differenceDBR', differenceDBR);
+    // Parse number with commas
+    function parseNumberWithCommas(number) {
+        return parseFloat(number.replace(/,/g, '')) || 0;
+    }
 
-    // DBR color coding
-    const differenceDBRElement = document.getElementById('differenceDBR');
-    differenceDBRElement.className = differenceDBR > 0 ? 'green-bg' : 'orange-bg';
-}
+    // Round to 2 decimal places
+    function roundToTwoDecimals(value) {
+        return Math.round((value + Number.EPSILON) * 100) / 100;
+    }
+
+    // Add Money Needed fields
+    addMoneyNeeded.addEventListener('click', function () {
+        const field = document.createElement('div');
+        field.innerHTML = `
+            <input type="text" class="moneyNeededText" placeholder="Description">
+            <input type="text" class="moneyNeededValue amount-input" placeholder="Amount">
+            <button class="removeMoneyNeeded">-</button>
+        `;
+        moneyNeededFields.appendChild(field);
+
+        field.querySelector('.removeMoneyNeeded').addEventListener('click', function () {
+            moneyNeededFields.removeChild(field);
+            updateInputSummary();
+            calculate();
+        });
+
+        field.querySelector('.moneyNeededValue').addEventListener('input', function () {
+            updateInputSummary();
+            calculate();
+        });
+    });
+
+    // Admin Fees radio buttons
+    adminFeesRadios.forEach(radio => {
+        radio.addEventListener('change', function () {
+            customFees.style.display = this.value === 'custom' ? 'block' : 'none';
+            calculate();
+        });
+    });
+
+    customFees.addEventListener('input', calculate);
+
+    // Calculate on input change
+    [salary, installment, months, paid, remainingPrinciple, downpayment, percentage, newMonths].forEach(input => {
+        input.addEventListener('input', calculate);
+    });
+
+    // Update input summary
+    function updateInputSummary() {
+        let summary = '';
+        moneyNeededValues = [];
+
+        moneyNeededFields.querySelectorAll('.moneyNeededValue').forEach((input, index) => {
+            const text = input.previousElementSibling.value || `debt${index + 1}`;
+            const value = parseNumberWithCommas(input.value);
+            moneyNeededValues.push(value);
+            summary += `<div>${text}: ${formatNumberWithCommas(value)}</div>`;
+        });
+
+        inputSummary.innerHTML = summary;
+    }
+
+    // Main calculation function
+    function calculate() {
+        const salaryValue = parseNumberWithCommas(salary.value);
+        const installmentValue = parseNumberWithCommas(installment.value);
+        const monthsValue = parseFloat(months.value) || 0;
+        const paidValue = parseFloat(paid.value) || 0;
+        const remainingPrincipleValue = parseNumberWithCommas(remainingPrinciple.value);
+        const downpaymentValue = parseNumberWithCommas(downpayment.value);
+        const percentageValue = parseFloat(percentage.value) || 0;
+        const newMonthsValue = parseFloat(newMonths.value) || 0;
+
+        const totalMoneyNeeded = moneyNeededValues.reduce((sum, value) => sum + value, 0);
+
+        const reminingMonthsValue = monthsValue - paidValue;
+        const currentRemainingValue = roundToTwoDecimals(installmentValue * reminingMonthsValue);
+        const savingBeforeNewLoanProfitValue = roundToTwoDecimals(currentRemainingValue - remainingPrincipleValue);
+        const remainingValue = roundToTwoDecimals(remainingPrincipleValue - downpaymentValue + totalMoneyNeeded);
+        const principleValue = remainingValue;
+
+        let adminFeesValue = 0;
+        const adminFeesSelected = document.querySelector('input[name="adminFees"]:checked').value;
+        if (adminFeesSelected === '1') {
+            adminFeesValue = Math.min(roundToTwoDecimals(principleValue * 0.01), 5000);
+        } else if (adminFeesSelected === 'custom') {
+            adminFeesValue = parseNumberWithCommas(customFees.value);
+        }
+
+        const profitPerYearValue = roundToTwoDecimals(principleValue * (percentageValue / 100));
+        const newMonthsFormulaValue = roundToTwoDecimals(newMonthsValue / 12);
+        const principleInstalmentValue = roundToTwoDecimals(principleValue / newMonthsValue);
+        const totalMonthsProfitsValue = roundToTwoDecimals(profitPerYearValue * newMonthsFormulaValue);
+        const perMonthValue = roundToTwoDecimals(totalMonthsProfitsValue / newMonthsValue);
+        const newInstallmentValue = roundToTwoDecimals(principleInstalmentValue + perMonthValue);
+        const differentOfNewLoanInstalmentAmountValue = roundToTwoDecimals(installmentValue - newInstallmentValue);
+        const totalLoanValue = roundToTwoDecimals(principleValue + totalMonthsProfitsValue);
+        const totalLoanProfitValue = roundToTwoDecimals(adminFeesValue + totalMonthsProfitsValue);
+        const totalCashValue = roundToTwoDecimals(principleValue - adminFeesValue);
+
+        const oldDBRValue = roundToTwoDecimals(installmentValue / salaryValue);
+        const newDBRValue = roundToTwoDecimals(newInstallmentValue / salaryValue);
+        const differenceDBRValue = roundToTwoDecimals(oldDBRValue - newDBRValue);
+
+        reminingMonths.value = reminingMonthsValue.toLocaleString();
+        currentRemaining.value = formatNumberWithCommas(currentRemainingValue);
+        savingBeforeNewLoanProfit.value = formatNumberWithCommas(savingBeforeNewLoanProfitValue);
+        remaining.value = formatNumberWithCommas(remainingValue);
+        principle.value = formatNumberWithCommas(principleValue);
+        adminFeesResult.value = formatNumberWithCommas(adminFeesValue);
+        profitPerYear.value = formatNumberWithCommas(profitPerYearValue);
+        newMonthsFormula.value = newMonthsFormulaValue.toFixed(2);
+        principleInstalment.value = formatNumberWithCommas(principleInstalmentValue);
+        totalMonthsProfits.value = formatNumberWithCommas(totalMonthsProfitsValue);
+        perMonth.value = formatNumberWithCommas(perMonthValue);
+        newInstallment.value = formatNumberWithCommas(newInstallmentValue);
+        differentOfNewLoanInstalmentAmount.value = formatNumberWithCommas(differentOfNewLoanInstalmentAmountValue);
+        totalLoan.value = formatNumberWithCommas(totalLoanValue);
+        totalLoanProfit.value = formatNumberWithCommas(totalLoanProfitValue);
+        totalCash.value = formatNumberWithCommas(totalCashValue);
+        oldDBR.value = oldDBRValue.toFixed(2);
+        newDBR.value = newDBRValue.toFixed(2);
+        differenceDBR.value = differenceDBRValue.toFixed(2);
+
+        if (differenceDBRValue > 0) {
+            differenceDBR.style.backgroundColor = 'green';
+        } else {
+            differenceDBR.style.backgroundColor = 'orange';
+        }
+    }
+});
