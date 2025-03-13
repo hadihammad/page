@@ -85,3 +85,18 @@ input[readonly] {
     font-size: 14px;
     color: #555;
 }
+
+#copyToCsv {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+#copyToCsv:hover {
+    background-color: #218838;
+}

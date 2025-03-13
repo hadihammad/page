@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const adminFeesRadios = document.querySelectorAll('input[name="adminFees"]');
     const customFees = document.getElementById('customFees');
     const inputSummary = document.getElementById('inputSummary');
+    const copyToCsvButton = document.getElementById('copyToCsv');
 
     const reminingMonths = document.getElementById('reminingMonths');
     const currentRemaining = document.getElementById('currentRemaining');
@@ -123,6 +124,66 @@ document.addEventListener('DOMContentLoaded', function () {
             <div>Admin Fees: ${adminFeesResult.value}</div>
         `;
     }
+
+// Generate CSV data with tabs as delimiters
+function generateCsvData() {
+    const inputs = [
+        { label: 'Salary', value: salary.value },
+        { label: 'Installment', value: installment.value },
+        { label: 'Months', value: months.value },
+        { label: 'Paid', value: paid.value },
+        { label: 'Remaining Principle', value: remainingPrinciple.value },
+        { label: 'Downpayment', value: downpayment.value },
+        { label: 'Percentage', value: percentage.value },
+        { label: 'New Months', value: newMonths.value },
+        { label: 'Admin Fees', value: adminFeesResult.value },
+    ];
+
+    const moneyNeeded = [];
+    moneyNeededFields.querySelectorAll('.moneyNeededValue').forEach((input, index) => {
+        const text = input.previousElementSibling.value || `Debt${index + 1}`;
+        const value = input.value;
+        moneyNeeded.push({ label: text, value });
+    });
+
+    const results = [
+        { label: 'Remining Months', value: reminingMonths.value },
+        { label: 'Current Remaining', value: currentRemaining.value },
+        { label: 'Saving Before New Loan Profit', value: savingBeforeNewLoanProfit.value },
+        { label: 'Remaining', value: remaining.value },
+        { label: 'Principle', value: principle.value },
+        { label: 'Profit Per Year', value: profitPerYear.value },
+        { label: 'New Months Formula', value: newMonthsFormula.value },
+        { label: 'Principle Instalment', value: principleInstalment.value },
+        { label: 'Total Months Profits', value: totalMonthsProfits.value },
+        { label: 'Per Month', value: perMonth.value },
+        { label: 'New Installment', value: newInstallment.value },
+        { label: 'Different of New Loan Instalment Amount', value: differentOfNewLoanInstalmentAmount.value },
+        { label: 'Total Loan', value: totalLoan.value },
+        { label: 'Total Loan Profit', value: totalLoanProfit.value },
+        { label: 'Total Cash', value: totalCash.value },
+        { label: 'Old DBR', value: oldDBR.value },
+        { label: 'New DBR', value: newDBR.value },
+        { label: 'Difference in DBR', value: differenceDBR.value },
+    ];
+
+    // Combine all data
+    const allData = [...inputs, ...moneyNeeded, ...results];
+
+    // Convert to tab-delimited format
+    const csvRows = allData.map(item => `${item.label}\t${item.value}`).join('\n');
+    return csvRows;
+}
+
+// Copy CSV data to clipboard
+copyToCsvButton.addEventListener('click', function () {
+    const csvData = generateCsvData();
+    navigator.clipboard.writeText(csvData).then(() => {
+        alert('Data copied to clipboard! Paste it into Excel or a .csv file.');
+    }).catch(() => {
+        alert('Failed to copy data. Please manually copy the data.');
+    });
+});
 
     // Main calculation function
     function calculate() {
