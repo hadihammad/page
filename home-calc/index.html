@@ -11,10 +11,16 @@
         <h1>Home Loan Calculator</h1>
         <form id="loanForm">
             <label for="salary">Salary:</label>
-            <input type="number" id="salary" required>
+            <input type="text" id="salary" required>
 
-            <label for="loanAmount">Loan Amount:</label>
-            <input type="number" id="loanAmount" required>
+            <label for="personalLoanAmount">Personal Loan Amount (Default: 33% of Salary):</label>
+            <input type="text" id="personalLoanAmount" required>
+
+            <label for="homeLoanAmount">Home Loan Amount:</label>
+            <input type="text" id="homeLoanAmount" required>
+
+            <label for="desiredHomeLoanDBR">Desired Home Loan DBR % (First 5 Years):</label>
+            <input type="number" id="desiredHomeLoanDBR" required>
 
             <label for="years">Years:</label>
             <input type="number" id="years" required>
@@ -31,10 +37,13 @@
                 </label>
             </div>
             <label for="availableDownpayment">Available Downpayment:</label>
-            <input type="number" id="availableDownpayment" value="0">
+            <input type="text" id="availableDownpayment" value="0">
 
             <label for="availableForLoan">Available for Loan:</label>
-            <input type="number" id="availableForLoan" value="0">
+            <input type="text" id="availableForLoan" value="0">
+
+            <label for="currentRent">Current Rent Installment:</label>
+            <input type="text" id="currentRent" required>
 
             <label for="percentage">Percentage:</label>
             <input type="number" id="percentage" required>
@@ -45,6 +54,15 @@
         <div id="results">
             <!-- Results will be displayed here -->
         </div>
+
+        <!-- Add Import and Export Buttons -->
+        <div class="import-export-buttons">
+            <button id="importButton">Import Data</button>
+            <button id="copyToCsvButton">Copy to CSV</button>
+        </div>
+
+        <!-- Hidden file input for import -->
+        <input type="file" id="importFileInput" accept=".csv, .txt" style="display: none;">
     </div>
 
     <script src="script.js"></script>
