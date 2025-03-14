@@ -89,6 +89,9 @@ document.addEventListener('DOMContentLoaded', function () {
             updateInputSummary();
             calculate();
         });
+
+        // Trigger calculation after adding a new field
+        calculate();
     }
 
     // Admin Fees radio buttons
@@ -286,6 +289,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const downpaymentValue = parseNumberWithCommas(downpayment.value);
         const percentageValue = parseFloat(percentage.value) || 0;
         const newMonthsValue = parseFloat(newMonths.value) || 0;
+
+        // Update moneyNeededValues array with current values
+        moneyNeededValues = [];
+        moneyNeededFields.querySelectorAll('.moneyNeededValue').forEach(input => {
+            moneyNeededValues.push(parseNumberWithCommas(input.value));
+        });
 
         const totalMoneyNeeded = moneyNeededValues.reduce((sum, value) => sum + value, 0);
 
