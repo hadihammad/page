@@ -112,8 +112,14 @@
                 <label for="differenceDBR">Difference in DBR:</label>
                 <input type="text" id="differenceDBR" readonly>
             </div>
-            <!-- Add this button -->
             <button id="copyToCsv">Copy to CSV</button>
+        </div>
+
+        <!-- Import Section -->
+        <div class="import-section">
+            <h3>Import Data</h3>
+            <input type="file" id="importFileInput" accept=".csv, .txt" style="display: none;">
+            <button id="importFileButton">Import from File</button>
         </div>
     </div>
     <script src="script.js"></script>
