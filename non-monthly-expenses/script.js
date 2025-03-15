@@ -13,13 +13,20 @@ function renderCategories() {
       <div class="category-header">
         <h3>${category.name} (Total: $${category.total.toFixed(2)})</h3>
         <div class="buttons">
-          <button onclick="addSubcategoryPrompt(${catIndex})">+ Subcategory</button>
-          <button onclick="addItemForm(${catIndex})">+ Item</button>
+          <button onclick="showSubcategoryForm(${catIndex})">+ Subcategory</button>
+          <button onclick="showItemForm(${catIndex})">+ Item</button>
           <button onclick="updateCategoryPrompt(${catIndex})">✏️</button>
           <button onclick="deleteCategory(${catIndex})">🗑️</button>
         </div>
       </div>
     `;
+
+    // Render items directly in category
+    const itemsDiv = document.createElement('div');
+    category.items.forEach((item, itemIndex) => {
+      itemsDiv.appendChild(createItemElement(catIndex, null, itemIndex, item));
+    });
+    categoryDiv.appendChild(itemsDiv);
 
     // Render subcategories
     const subcategoriesDiv = document.createElement('div');
@@ -30,7 +37,7 @@ function renderCategories() {
         <div class="subcategory-header">
           <h4>${sub.name} (Total: $${sub.total.toFixed(2)})</h4>
           <div class="buttons">
-            <button onclick="addItemForm(${catIndex}, ${subIndex})">+ Item</button>
+            <button onclick="showItemForm(${catIndex}, ${subIndex})">+ Item</button>
             <button onclick="updateSubcategoryPrompt(${catIndex}, ${subIndex})">✏️</button>
             <button onclick="deleteSubcategory(${catIndex}, ${subIndex})">🗑️</button>
           </div>
@@ -46,13 +53,6 @@ function renderCategories() {
       subcategoriesDiv.appendChild(subDiv);
     });
     categoryDiv.appendChild(subcategoriesDiv);
-
-    // Render items directly in category
-    const itemsDiv = document.createElement('div');
-    category.items.forEach((item, itemIndex) => {
-      itemsDiv.appendChild(createItemElement(catIndex, null, itemIndex, item));
-    });
-    categoryDiv.appendChild(itemsDiv);
 
     container.appendChild(categoryDiv);
   });
@@ -79,16 +79,16 @@ function calculateTotals() {
   categories.forEach(category => {
     category.total = 0;
 
+    // Add direct items
+    category.total += category.items.reduce((sum, item) => sum + item.amount, 0);
+    totalItems += category.items.length;
+
     // Calculate subcategory totals
     category.subcategories.forEach(sub => {
       sub.total = sub.items.reduce((sum, item) => sum + item.amount, 0);
       category.total += sub.total;
       totalItems += sub.items.length;
     });
-
-    // Add direct items
-    category.total += category.items.reduce((sum, item) => sum + item.amount, 0);
-    totalItems += category.items.length;
 
     globalTotal += category.total;
   });
@@ -107,16 +107,30 @@ function addCategory() {
   }
 }
 
-function addSubcategoryPrompt(catIndex) {
-  const name = prompt('Enter subcategory name:');
+function showSubcategoryForm(catIndex) {
+  const form = document.createElement('div');
+  form.className = 'subcategory-form';
+  form.innerHTML = `
+    <input type="text" placeholder="Subcategory name" class="subcategory-name">
+    <button onclick="addSubcategory(${catIndex}, this)">Add</button>
+  `;
+  const categoryDiv = document.querySelectorAll('.category-box')[catIndex];
+  categoryDiv.appendChild(form);
+}
+
+function addSubcategory(catIndex, button) {
+  const form = button.parentElement;
+  const name = form.querySelector('.subcategory-name').value.trim();
   if (name) {
     categories[catIndex].subcategories.push({ name, items: [], total: 0 });
+    form.remove();
     renderCategories();
   }
 }
 
-function addItemForm(catIndex, subIndex) {
+function showItemForm(catIndex, subIndex) {
   const form = document.createElement('div');
+  form.className = 'item-form';
   form.innerHTML = `
     <input type="text" placeholder="Item name" class="item-name">
     <input type="number" placeholder="Amount" class="item-amount" step="0.01">
@@ -208,17 +222,17 @@ function exportData() {
 
   categories.forEach(category => {
     csvContent += `Category\t${category.name}\t\t\n`;
+    category.items.forEach(item => {
+      item.dates.forEach(date => {
+        csvContent += `Item\t${item.name}\t${item.amount}\t${date}\n`;
+      });
+    });
     category.subcategories.forEach(sub => {
       csvContent += `Subcategory\t${sub.name}\t\t\n`;
       sub.items.forEach(item => {
         item.dates.forEach(date => {
           csvContent += `Item\t${item.name}\t${item.amount}\t${date}\n`;
         });
-      });
-    });
-    category.items.forEach(item => {
-      item.dates.forEach(date => {
-        csvContent += `Item\t${item.name}\t${item.amount}\t${date}\n`;
       });
     });
   });
