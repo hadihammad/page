@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monthly Expenses Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Monthly Expenses Tracker</h1>
+    <div class="controls">
+      <input type="text" id="categoryName" placeholder="Enter category name">
+      <button id="addCategory">Add Main Category</button>
+      <button id="exportData">Export to CSV</button>
+      <input type="file" id="importFile" accept=".csv">
+      <button id="importData">Import from CSV</button>
+      <!-- Global Totals Display -->
+      <div id="globalTotals">
+        <strong>Global Totals:</strong>
+        <span id="totalItems">Total Items: 0</span> | 
+        <span id="totalAmount">Total Amount: $0.00</span>
+      </div>
+    </div>
+    <div id="categories"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
