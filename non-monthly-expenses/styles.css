@@ -66,6 +66,14 @@ button:hover {
 .item-box {
   margin-left: 40px;
   margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-box.done {
+  opacity: 0.6;
+  text-decoration: line-through;
 }
 
 .buttons {
@@ -81,15 +89,44 @@ button:hover {
 }
 
 .subcategory-form,
-.item-form {
+.item-form,
+.edit-form {
   margin-top: 10px;
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .subcategory-form input,
-.item-form input {
+.item-form input,
+.edit-form input {
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  flex: 1 1 200px;
+}
+
+.edit-form input[type="date"] {
+  flex: 0 1 180px;
+}
+
+.edit-form button {
+  flex: 0 1 auto;
+}
+
+.edit-mode {
+  background-color: #fff3cd;
+}
+
+.status-indicator {
+  display: flex;
+  gap: 5px;
+  margin-left: auto;
+  align-items: center;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }

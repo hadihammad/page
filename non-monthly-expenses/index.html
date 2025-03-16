@@ -3,32 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Expense Organizer</title>
+  <title>Non-Monthly Expense Organizer</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Expense Organizer</h1>
+    <h1>Non-Monthly Expense Organizer</h1>
 
-    <!-- Add Category -->
     <div class="add-category">
       <input type="text" id="categoryName" placeholder="New category name">
       <button onclick="addCategory()">Add Category</button>
     </div>
 
-    <!-- Import/Export -->
     <div class="import-export">
       <input type="file" id="importFile" accept=".csv">
       <button onclick="importData()">Import</button>
       <button onclick="exportData()">Export</button>
     </div>
 
-    <!-- Display Categories -->
     <div id="categoriesContainer"></div>
 
-    <!-- Global Totals -->
     <div class="totals">
-      <p>Global Total: $<span id="globalTotal">0.00</span></p>
+      <p>Global Total: ﷼<span id="globalTotal">0.00</span></p>
+      <p>Completed Total: ﷼<span id="globalDoneTotal">0.00</span></p>
       <p>Total Items: <span id="totalItems">0</span></p>
     </div>
   </div>
