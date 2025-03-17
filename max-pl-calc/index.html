@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Loan Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="calculator">
+            <div class="header">
+                <h1><i class="fas fa-university"></i> Premium Loan Calculator ﷼</h1>
+            </div>
+
+            <div class="input-section">
+                <div class="input-group">
+                    <label>Monthly Salary:</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="salary" placeholder="Enter amount">
+                        <span class="currency">﷼</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Debt Burden Ratio (DBR):</label>
+                    <input type="number" id="dbr" value="0.333276778786057" step="0.0001"
+                           min="0" max="0.3405">
+                    <div class="note">Max 0.3405</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Monthly Instalment:</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="instalment" placeholder="Auto-calculated">
+                        <span class="currency">﷼</span>
+                    </div>
+                    <div class="note">Max: <span id="maxInstalment">﷼ 0.00</span></div>
+                </div>
+
+                <div class="input-group">
+                    <label>Loan Duration (Months):</label>
+                    <input type="number" id="months" min="1" max="60" placeholder="1-60 months">
+                    <div class="note">Max 60 months</div>
+                </div>
+
+                <div class="input-group">
+                    <label>First Deduction Month:</label>
+                    <div class="input-wrapper">
+                        <input type="month" id="startDate">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Yearly Interest Rate (%):</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="interest" step="0.01" placeholder="Enter rate">
+                        <span class="percentage">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculate()">
+                <i class="fas fa-calculator"></i> Calculate Now
+            </button>
+
+            <div class="results">
+                <h2><i class="fas fa-file-contract"></i> Loan Summary</h2>
+                <div class="result-item">
+                    <span>Total Loan Amount:</span>
+                    <span id="totalLoan">﷼ 0.00</span>
+                </div>
+                <div class="result-item highlight">
+                    <span>Principal Amount:</span>
+                    <span id="principal">﷼ 0.00</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Interest:</span>
+                    <span id="totalInterest">﷼ 0.00</span>
+                </div>
+                <div class="result-item">
+                    <span>Last Deduction Date:</span>
+                    <span id="endDate">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

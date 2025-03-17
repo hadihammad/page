@@ -4,5 +4,6 @@
 | home-calc     |
 | loan-calc      |
 | loan      |
+| max-pl-calc      |
 | monthly-expenses      |
 | non-monthly-expenses      |
