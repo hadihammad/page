@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loan Percentage Finder</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Loan Percentage Finder</h1>
+    <form id="loanForm">
+      <div class="input-group">
+        <label for="principal">Principal Amount (﷼):</label>
+        <input type="text" id="principal" placeholder="Enter principal amount" required>
+      </div>
+      <div class="input-group">
+        <label for="installment">Monthly Installment (﷼):</label>
+        <input type="text" id="installment" placeholder="Enter monthly installment" required>
+      </div>
+      <div class="input-group">
+        <label for="lastInstallment">Last Month Installment (﷼) <small>(if different)</small>:</label>
+        <input type="text" id="lastInstallment" placeholder="Enter last month installment">
+      </div>
+      <div class="input-group">
+        <label for="months">Loan Duration (Months):</label>
+        <input type="number" id="months" placeholder="Enter loan duration in months" required>
+      </div>
+      <button type="submit">Calculate</button>
+    </form>
+
+    <div class="results">
+      <h2>Results</h2>
+      <p><strong>Total Loan Amount:</strong> <span id="totalLoan">﷼ 0.00</span></p>
+      <p><strong>Total Interest:</strong> <span id="totalInterest">﷼ 0.00</span></p>
+      <p><strong>Total Interest Percentage:</strong> <span id="totalInterestPercentage">0.00%</span></p>
+      <p><strong>Yearly Interest Percentage:</strong> <span id="yearlyInterestPercentage">0.00%</span></p>
+      <p><strong>Monthly Interest:</strong> <span id="monthlyInterest">﷼ 0.00</span></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
