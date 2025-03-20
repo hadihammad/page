@@ -27,12 +27,15 @@ h1, h2 {
 label {
     display: block;
     margin-bottom: 5px;
+    font-weight: bold;
 }
 
 input {
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 button {
@@ -43,6 +46,7 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
 }
 
 button:hover {
@@ -54,5 +58,12 @@ button:hover {
 }
 
 .results p {
-    margin: 5px 0;
+    margin: 8px 0;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.results span {
+    font-weight: bold;
 }
