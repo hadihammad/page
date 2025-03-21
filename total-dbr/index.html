@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Products DBR</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Total Products DBR ﷼</h1>
+        
+        <div class="input-group">
+            <label for="salary">Monthly Salary:</label>
+            <input type="number" id="salary" placeholder="Enter monthly salary">
+        </div>
+
+        <div class="product-selector">
+            <select id="productType">
+                <option value="">Select Product</option>
+                <option value="personalLoan">Personal Loan</option>
+                <option value="creditCard">Credit Card</option>
+                <option value="autoLeasing">Auto Leasing</option>
+                <option value="homeLoan">Home Loan</option>
+            </select>
+            <button onclick="addProduct()">Add Product</button>
+        </div>
+
+        <div id="productsList" class="products-list"></div>
+
+        <button class="calculate-btn" onclick="calculateDBR()">Calculate DBR</button>
+
+        <div id="results" class="results"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
