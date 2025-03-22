@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Loan Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Property Loan ﷼</h1>
+        
+        <div class="calculator">
+            <div class="input-group">
+                <label>Monthly Salary (﷼)</label>
+                <div class="input-container">
+                    <input type="text" id="salary" placeholder="0" onblur="formatComma(this)" onfocus="unformatComma(this)">
+                    <span class="currency">﷼</span>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Property Price (﷼)</label>
+                    <div class="input-container">
+                        <input type="text" id="propertyPrice" placeholder="0" onblur="formatComma(this)" onfocus="unformatComma(this)">
+                        <span class="currency">﷼</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Bank Percentage (%)</label>
+                    <div class="input-container">
+                        <input type="number" id="percentage" placeholder="70" step="1">
+                        <span class="currency">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Loan Term (Months)</label>
+                    <input type="number" id="months" placeholder="120">
+                </div>
+                <div class="input-group">
+                    <label>Annual Interest Rate (%)</label>
+                    <div class="input-container">
+                        <input type="number" id="interestRate" placeholder="5" step="0.1">
+                        <span class="currency">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="calculateLoan()">Calculate</button>
+
+            <div class="results">
+                <div class="result-item">
+                    <span>Loan Amount:</span>
+                    <span id="loanAmount">﷼ 0.00</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Interest:</span>
+                    <span id="totalInterest">﷼ 0.00</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Loan:</span>
+                    <span id="totalLoan">﷼ 0.00</span>
+                </div>
+                <div class="result-item">
+                    <span>Monthly Installment:</span>
+                    <span id="installment">﷼ 0.00</span>
+                </div>
+                <div class="result-item">
+                    <span>Fees (1%):</span>
+                    <span id="fees">﷼ 0.00</span>
+                </div>
+                <div class="result-item">
+                    <span>Debt Ratio (DBR):</span>
+                    <span id="dbr">0.00%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
